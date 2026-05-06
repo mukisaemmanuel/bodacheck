@@ -115,8 +115,9 @@ require_once __DIR__ . '/includes/header.php';
             <span class="check-icon"><?php echo $rider['has_logbook'] ? '&#10003;' : '&#10007;'; ?></span>
             <span>Logbook</span>
         </div>
-        <div class="checklist-item <?php echo $rider['is_insured'] ? 'has' : 'missing'; ?>">
-            <span class="check-icon"><?php echo $rider['is_insured'] ? '&#10003;' : '&#10007;'; ?></span>
+        <?php $insured_valid = isRiderInsured($rider); ?>
+        <div class="checklist-item <?php echo $insured_valid ? 'has' : 'missing'; ?>">
+            <span class="check-icon"><?php echo $insured_valid ? '&#10003;' : '&#10007;'; ?></span>
             <span>Insurance</span>
         </div>
     </div>
@@ -134,9 +135,16 @@ require_once __DIR__ . '/includes/header.php';
         <div>
             <div class="scan-detail-label">Insurance</div>
             <div class="scan-detail-value">
-                <?php echo $rider['is_insured']
-                    ? '<span style="color:var(--green);">Insured</span>'
-                    : '<span style="color:var(--red);">Not Insured</span>'; ?>
+                <?php if (isRiderInsured($rider)): ?>
+                    <span style="color:var(--green);">Insured</span>
+                    <div style="font-size:0.8rem; color:var(--grey-light); font-weight:normal; margin-top:2px;">
+                        <?php echo sanitize($rider['insurance_provider']); ?><br>
+                        Policy: <?php echo sanitize($rider['insurance_policy_number']); ?><br>
+                        Exp: <?php echo date('M j, Y', strtotime($rider['insurance_expiry_date'])); ?>
+                    </div>
+                <?php else: ?>
+                    <span style="color:var(--red);">Not Insured / Expired</span>
+                <?php endif; ?>
             </div>
         </div>
         <div>

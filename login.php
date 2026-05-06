@@ -1,9 +1,6 @@
 <?php
 /**
  * Login Page — login.php
- * ----------------------
- * Two tabs: Rider (phone + password) and Officer/Admin (email + password).
- * Redirects to the correct dashboard based on role after login.
  */
 require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/session.php';

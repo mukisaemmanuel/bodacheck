@@ -87,3 +87,7 @@ $admin_user = $stmt->fetch();
 
         <!-- Page content -->
         <div class="admin-content">
+        </script>
+
+        <!-- Page content -->
+        <div class="admin-content">

@@ -61,3 +61,10 @@ Look at `login.php` and `includes/session.php`.
 1. **Start with the frontend:** Open `index.php` and follow the links to see how pages connect.
 2. **Follow the data:** Register a test rider, then look at your database (via phpMyAdmin) to see exactly how the row was created in the `riders` table.
 3. **Trace a feature:** Try logging a violation as an officer. Read `officer/log_violation.php` line-by-line to see how it inserts into the `violations` table and then updates the `riders` table.
+
+
+🟩 Green Flag (Safe to Ride - Clean Record): http://localhost/bodacheck/scan.php?token=RDR-3bfc69f0ece223929fbbcd9545a8eb50
+
+🟧 Amber Flag (Caution - Minor Violations): http://localhost/bodacheck/scan.php?token=RDR-e04800ac2ad27c63de35e269b053d610
+
+🟥 Red Flag (Not Safe - Expired Insurance/Major Violations): http://localhost/bodacheck/scan.php?token=RDR-d8fc903387447cfaea0cb092ee98868c

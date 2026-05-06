@@ -1,12 +1,5 @@
 <?php
-/**
- * Landing Page — index.php
- * ------------------------
- * The main entry point. Tells the full BodaCheck story:
- * the problem, the stats, the root causes, the solution,
- * how it compares to existing approaches, and the revenue model.
- * Two CTAs: Register as a Rider, Login.
- */
+
 require_once __DIR__ . '/includes/header.php';
 $base = baseUrl();
 ?>

@@ -100,3 +100,20 @@ function getRegistrationFee(): int {
 function formatUGX(int $amount): string {
     return 'UGX ' . number_format($amount);
 }
+
+/**
+ * Check if rider's insurance is valid based on details and expiry.
+ */
+function isRiderInsured(array $rider): bool {
+    if (empty($rider['is_insured'])) return false;
+    if (empty($rider['insurance_provider']) || empty($rider['insurance_policy_number']) || empty($rider['insurance_expiry_date'])) return false;
+    
+    try {
+        $expiry = new DateTime($rider['insurance_expiry_date']);
+        $now = new DateTime('today');
+        return $expiry >= $now;
+    } catch (Exception $e) {
+        return false;
+    }
+}
+

@@ -23,6 +23,11 @@ $success = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $full_name     = sanitize($_POST['full_name'] ?? '');
     $is_insured    = isset($_POST['is_insured']) ? 1 : 0;
+    $insurance_provider = sanitize($_POST['insurance_provider'] ?? '');
+    $insurance_policy_number = sanitize($_POST['insurance_policy_number'] ?? '');
+    $insurance_expiry_date = $_POST['insurance_expiry_date'] ?? null;
+    if (empty($insurance_expiry_date)) $insurance_expiry_date = null;
+
     $has_helmet    = isset($_POST['has_helmet']) ? 1 : 0;
     $has_licence   = isset($_POST['has_licence']) ? 1 : 0;
     $has_psv_permit = isset($_POST['has_psv_permit']) ? 1 : 0;
@@ -32,9 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Full name is required.';
     } else {
         $stmt = $pdo->prepare(
-            'UPDATE riders SET full_name = ?, is_insured = ?, has_helmet = ?, has_licence = ?, has_psv_permit = ?, has_logbook = ? WHERE id = ?'
+            'UPDATE riders SET full_name = ?, is_insured = ?, insurance_provider = ?, insurance_policy_number = ?, insurance_expiry_date = ?, has_helmet = ?, has_licence = ?, has_psv_permit = ?, has_logbook = ? WHERE id = ?'
         );
-        $stmt->execute([$full_name, $is_insured, $has_helmet, $has_licence, $has_psv_permit, $has_logbook, $rider_id]);
+        $stmt->execute([$full_name, $is_insured, $insurance_provider, $insurance_policy_number, $insurance_expiry_date, $has_helmet, $has_licence, $has_psv_permit, $has_logbook, $rider_id]);
         $_SESSION['user_name'] = $full_name;
         $success = 'Profile updated successfully.';
 
@@ -106,11 +111,32 @@ require_once __DIR__ . '/../includes/header.php';
                     <input type="checkbox" name="has_logbook" value="1" <?php echo $rider['has_logbook'] ? 'checked' : ''; ?>>
                     I have a logbook
                 </label>
-                <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                    <input type="checkbox" name="is_insured" value="1" <?php echo $rider['is_insured'] ? 'checked' : ''; ?>>
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; margin-bottom:var(--sp-2);">
+                    <input type="checkbox" name="is_insured" value="1" <?php echo $rider['is_insured'] ? 'checked' : ''; ?> id="is_insured_checkbox">
                     I am insured
                 </label>
+                
+                <div id="insurance_details" style="display: <?php echo $rider['is_insured'] ? 'block' : 'none'; ?>; padding-left: 28px; margin-bottom: var(--sp-4);">
+                    <div class="form-group" style="margin-bottom:var(--sp-2);">
+                        <label>Insurance Provider</label>
+                        <input type="text" name="insurance_provider" class="form-control" value="<?php echo sanitize($rider['insurance_provider'] ?? ''); ?>" placeholder="e.g. UAP Old Mutual">
+                    </div>
+                    <div class="form-group" style="margin-bottom:var(--sp-2);">
+                        <label>Policy Number</label>
+                        <input type="text" name="insurance_policy_number" class="form-control" value="<?php echo sanitize($rider['insurance_policy_number'] ?? ''); ?>" placeholder="e.g. POL-123456">
+                    </div>
+                    <div class="form-group">
+                        <label>Expiry Date</label>
+                        <input type="date" name="insurance_expiry_date" class="form-control" value="<?php echo sanitize($rider['insurance_expiry_date'] ?? ''); ?>">
+                    </div>
+                </div>
             </div>
+
+            <script>
+                document.getElementById('is_insured_checkbox').addEventListener('change', function() {
+                    document.getElementById('insurance_details').style.display = this.checked ? 'block' : 'none';
+                });
+            </script>
 
             <button type="submit" class="btn btn-primary" style="width:100%;">Save Changes</button>
         </form>
