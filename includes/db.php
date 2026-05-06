@@ -17,9 +17,9 @@ try {
         $DB_USER,
         $DB_PASS,
         [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES => false,
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,// if some thing goes wrong it throws an error
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,// fetches data in associative array format
+            PDO::ATTR_EMULATE_PREPARES => false,// use real prepared statements instead of emulating them
         ]
     );
 } catch (PDOException $e) {

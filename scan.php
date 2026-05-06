@@ -1,25 +1,11 @@
 <?php
-/**
- * QR Scan Result Page — scan.php
- * --------------------------------
- * THE MOST IMPORTANT PAGE. When someone scans a rider's QR code,
- * their phone opens this URL. Shows different views based on role:
- *
- *   Public (no login): name, photo, score, status, SACCO, insurance, compliance checklist
- *   Officer: full profile + log violation button + violation history
- *   Admin: full profile + edit score button
- *   Rider (own QR): personal view with dashboard link
- *   Rider (other QR): same as public
- *
- * Must be fast, clear, and readable on a phone screen.
- * 2-second UX: scan sticker, see green or red, no app, no login.
- */
+
+
 require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/session.php';
 require_once __DIR__ . '/includes/functions.php';
 $base = baseUrl();
 
-// Get the QR token from the URL
 $token = $_GET['token'] ?? '';
 
 if (empty($token)) {
@@ -29,7 +15,6 @@ if (empty($token)) {
     exit;
 }
 
-// Look up the rider by QR token, including SACCO name
 $stmt = $pdo->prepare(
     'SELECT r.*, s.name AS sacco_name, s.district AS sacco_district
      FROM riders r
@@ -40,7 +25,6 @@ $stmt->execute([$token]);
 $rider = $stmt->fetch();
 
 if (!$rider) {
-    // Unregistered QR — same result as red
     require_once __DIR__ . '/includes/header.php';
     echo '<div class="scan-result">';
     echo '<div class="scan-photo-placeholder" style="border-color:var(--red);">?</div>';
@@ -54,7 +38,7 @@ if (!$rider) {
     exit;
 }
 
-// Determine who is viewing
+
 $viewer_role = 'public';
 $viewer_id = null;
 
@@ -80,9 +64,7 @@ $score_class = 'score-' . $rider['status'];
 require_once __DIR__ . '/includes/header.php';
 ?>
 
-<!-- ============================================ -->
-<!-- SCAN RESULT — Mobile-First, 2-Second UX      -->
-<!-- ============================================ -->
+
 <div class="scan-result">
 
     <!-- Rider photo or placeholder -->
